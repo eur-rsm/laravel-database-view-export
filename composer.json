@@ -1,0 +1,29 @@
+{
+    "name": "eur-rsm/database-view-export",
+    "description": "A Laravel Nova package for exporting configured database views.",
+    "keywords": [
+        "laravel",
+        "nova",
+        "exports",
+        "database-views",
+        "actions"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3.0",
+        "laravel/nova": "*",
+        "maatwebsite/excel": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "EUR\\RSM\\DatabaseViewExport\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EUR\\RSM\\DatabaseViewExport\\DatabaseViewExportServiceProvider"
+            ]
+        }
+    }
+}
