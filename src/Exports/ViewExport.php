@@ -5,7 +5,6 @@ namespace EUR\RSM\DatabaseViewExport\Exports;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -21,6 +20,9 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
 
     /** @var string */
     private $label;
+
+    /** @var string */
+    private $slug;
 
     /**
      * Name of the view (table) to base the export on.
@@ -40,10 +42,15 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
      * @param  string  $label
      * @param  string  $viewName
      */
-    public function __construct(string $label, string $viewName)
+    public function __construct(string $slug, string $label, string $viewName)
     {
         $this->label = $label;
+        $this->slug = $slug;
         $this->viewName = $viewName;
+
+        if (!$this->isView($viewName)) {
+            throw new \RuntimeException("The specified view name '{$viewName}' is not a valid view.");
+        }
     }
 
     /**
@@ -53,7 +60,7 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
      */
     public function key(): string
     {
-        return Str::snake($this->label(), '-');
+        return $this->slug();
     }
 
     /**
@@ -64,6 +71,16 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
     public function label(): string
     {
         return $this->label;
+    }
+
+    /**
+     * Slug for this export, used in the URL.
+     *
+     * @return string
+     */
+    public function slug(): string
+    {
+        return $this->slug;
     }
 
     /**
@@ -105,5 +122,19 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
     public function filename(): string
     {
         return $this->key() . '_' . Carbon::now()->toDateTimeString() . '.' . strtolower($this->exportType);
+    }
+
+    /**
+     * Check if the given name is a view.
+     *
+     * @param  string  $viewName
+     * @return bool
+     */
+    private function isView(string $viewName): bool
+    {
+        return DB::select("SELECT TABLE_TYPE FROM information_schema.tables WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ?", [
+                $viewName,
+                config('database.connections.' . config('database.default') . '.database'),
+            ])[0]->TABLE_TYPE === 'VIEW';
     }
 }

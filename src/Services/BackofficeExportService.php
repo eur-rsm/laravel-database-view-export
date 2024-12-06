@@ -21,7 +21,7 @@ class BackofficeExportService
     {
         return $this->exports = $this->exports ?? ExportModel::all()
                 ->map(function (ExportModel $export): ViewExport {
-                    return new ViewExport($export->name, $export->view_name);
+                    return new ViewExport($export->slug, $export->name, $export->view_name);
                 });
     }
 

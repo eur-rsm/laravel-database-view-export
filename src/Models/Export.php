@@ -16,7 +16,7 @@ final class Export extends Model
     public $timestamps = false;
 
     /** @var string */
-    protected $primaryKey = 'name';
+    protected $primaryKey = 'slug';
 
     /** @var string */
     protected $keyType = 'string';
