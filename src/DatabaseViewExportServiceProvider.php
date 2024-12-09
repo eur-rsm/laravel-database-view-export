@@ -8,22 +8,14 @@ use Illuminate\Support\ServiceProvider;
 
 class DatabaseViewExportServiceProvider extends ServiceProvider
 {
-    /**
-     * @return void
-     */
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'database-view-export');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->app->booted(function (): void {
-            $this->routes();
-        });
+        $this->app->booted(fn() => $this->routes());
     }
 
-    /**
-     * @return void
-     */
     protected function routes(): void
     {
         if ($this->app->routesAreCached()) {
