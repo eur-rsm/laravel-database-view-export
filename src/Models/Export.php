@@ -10,14 +10,5 @@ final class Export extends Model
     protected $table = 'database_view_exports';
 
     /** @var bool */
-    public $incrementing = false;
-
-    /** @var bool */
     public $timestamps = false;
-
-    /** @var string */
-    protected $primaryKey = 'name';
-
-    /** @var string */
-    protected $keyType = 'string';
 }
