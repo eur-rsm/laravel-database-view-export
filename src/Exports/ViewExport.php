@@ -46,6 +46,11 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
         return DB::getSchemaBuilder()->getColumnListing($this->export->view_name);
     }
 
+    public function isView(): bool
+    {
+        return DB::getSchemaBuilder()->hasView($this->export->view_name);
+    }
+
     public function filename(): string
     {
         return $this->export->slug . '_' . now()->toDateTimeString() . '.' . strtolower($this->exportType);
