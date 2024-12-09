@@ -47,7 +47,7 @@ class BackofficeExportService
         $export = $this->all()->first(
             function (ViewExport $exportClass) use ($key): bool {
                 return $exportClass->key() === $key;
-            }
+            },
         );
 
         if (is_null($export)) {

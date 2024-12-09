@@ -22,7 +22,7 @@ final class ExportController
             },
             function (): void {
                 abort(500, 'Unable to run the requested export. An exception was thrown (see logs).');
-            }
+            },
         );
     }
 }
