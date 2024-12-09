@@ -53,7 +53,7 @@ final class ViewExport implements FromCollection, WithHeadings, WithStrictNullCo
      */
     public function key(): string
     {
-        return Str::snake($this->label(), '-');
+        return Str::of($this->label())->lower()->slug();
     }
 
     /**
